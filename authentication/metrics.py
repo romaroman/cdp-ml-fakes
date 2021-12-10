@@ -16,8 +16,6 @@ from p_tqdm import p_map
 from skimage.metrics import structural_similarity as ssim
 from sklearn.metrics import jaccard_score as jaccard
 
-import utils
-
 
 parser = argparse.ArgumentParser()
 parser.add_argument("templates", type=Path, help="Path to synchronized templates (for example: /.../templates/sync/dens50)")
@@ -81,7 +79,7 @@ def imthresh(img_gray: np.ndarray, thresh_adjust: int = -10, otsu: bool = True) 
 
 unfold = lambda x: [item for sublist in x for item in sublist]
 load = lambda x: sorted(list(Path(x).glob('??????.tif*')))
-read = lambda x: norm(utils.imread(x, -1))
+read = lambda x: norm(imread(x, -1))
 binarize = lambda x: imthresh((x * 255).astype(np.uint8))
 toblocks = lambda x: img2blocks(x, (args.bsize, args.bsize), args.bsize)
 
