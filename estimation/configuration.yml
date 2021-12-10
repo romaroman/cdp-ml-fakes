@@ -1,0 +1,61 @@
+checkpoint_dir: checkpoints
+results_dir: results
+
+batchsize: 18
+
+models:
+  unet:
+    name: UNet
+    input_channels: 1
+    filters:  [16, 64, 128, 128, 256, 256] #  [16, 64, 128, 256, 512, 1024]
+    layer_normalisation: False
+    optimizer: "adam"
+    lr: 0.0001
+    loss: "mse"
+    loss_weight: 1    
+
+  ClassicalDiscriminator:
+    name: ClassicalDiscriminator
+    filters: [128, 64, 32, 16, 8, 1] # [64, 128, 256, 512, 512, 1]
+    optimizer: "adam"
+    lr: 0.0001
+    loss: "binary_crossentropy"
+    loss_weight: 0.001
+
+dataset:
+  dataset_name: Indigo 1x1 base
+  args:
+    symbol_size:
+    templates_path: ./data/HP55/density_50/binary/
+    printed_path: ./data/HP55/density_50/original/
+
+    bad_indices: [5]
+
+    # sub-block train image, if case,
+    # if no, put it to be equal to the full size
+    template_target_size: [256, 256]
+    template_target_channels: []  # 0 < negative & gamma correction; 0 = original; > 0 = gamma correction coef.
+    target_size: [256, 256, 1]
+
+    # full size image: test
+    expected_template_target_size: [1520, 1520]
+    expected_target_size:  [1520, 1520, 1]
+
+    synchronize_with_template: False
+    is_stochastic: False
+    noise_std: 0.05
+    augmentation: True
+    augmentation_args:
+      first_order: [] #["gamma"] # ["rotation"]
+      second_order: [] #["flip"]
+      sub-block_step: 256
+      rotation_angles: [90, 180, 270]
+      flip: [0, 1] # ["horizontal", "vertical"]
+      gamma:  [0.3, 0.6, 0.3] # [start, end, step]
+    train_ratio: 0.4 # 40%
+    val_ratio: 0.1 # 10%
+    test_ration: 0.5 # 50%
+
+
+
+
